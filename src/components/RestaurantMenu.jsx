@@ -11,9 +11,24 @@ function RestaurantMenu({ cart, addToCart, removeFromCart, selectedRestaurant })
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!restaurant) {
+          const restaurantResponse = await restaurantService.getRestaurantById(id);
+          setRestaurant(restaurantResponse.data);
+        }
+
+        const menuResponse = await menuItemService.getMenuItemsByRestaurant(id);
+        setMenuItems(menuResponse.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, restaurant]);
 
   const fetchData = async () => {
     try {

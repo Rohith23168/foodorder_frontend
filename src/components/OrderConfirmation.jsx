@@ -9,8 +9,18 @@ function OrderConfirmation() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const response = await orderService.getOrderById(orderId);
+        setOrder(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching order:', error);
+        setLoading(false);
+      }
+    };
+
     fetchOrder();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
 
   const fetchOrder = async () => {
